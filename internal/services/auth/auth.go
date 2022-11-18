@@ -5,10 +5,10 @@ import (
 )
 
 type AuthService struct {
-	Storage store.Storage
+	Storage store.IStorage
 }
 
-func NewAuthService(s store.Storage) *AuthService {
+func NewAuthService(s store.IStorage) *AuthService {
 	return &AuthService{
 		Storage: s,
 	}

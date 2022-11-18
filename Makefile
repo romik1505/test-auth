@@ -29,3 +29,9 @@ swag:
 
 lint:
 	$(LOCAL_BIN)/golangci-lint run ./... --timeout 60s
+
+mocks:
+	mockgen -source=./internal/store/store.go -destination=./pkg/mock/store/mock_storage/mock_storage.go
+
+test:
+	go test -v ./...

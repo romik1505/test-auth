@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -55,7 +56,9 @@ func (h *Handler) login(w http.ResponseWriter, r *http.Request) error {
 
 	tokens, err := h.AuthService.Login(ctx, req)
 	if err != nil {
-		return err
+		if !errors.Is(err, auth.ErrInvalidPassword) && !errors.Is(err, auth.ErrUserNotFound) {
+			return err
+		}
 	}
 
 	if err := json.NewEncoder(w).Encode(tokens); err != nil {

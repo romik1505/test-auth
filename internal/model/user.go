@@ -22,3 +22,7 @@ func (u *User) HashPassword() error {
 	u.Password = hashedPass
 	return nil
 }
+
+func (u *User) ClearPassword() {
+	u.Password = []byte{}
+}

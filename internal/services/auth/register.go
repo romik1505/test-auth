@@ -26,7 +26,9 @@ func (a AuthService) Register(ctx context.Context, req mapper.RegisterRequest) e
 	if err != nil {
 		return ErrUserAlreadyExist
 	}
+	u.ClearPassword()
 	log.Println(u)
+
 	return nil
 }
 

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"database/sql"
 	"encoding/base64"
 	"errors"
 	"log"
@@ -17,22 +18,29 @@ const (
 	RefreshTokenTTL = time.Hour * 24 * 30 // 30 days
 )
 
+var (
+	ErrUserNotFound    = errors.New("user not found")
+	ErrInvalidPassword = errors.New("invalid password")
+)
+
 func (a AuthService) Login(ctx context.Context, req mapper.LoginRequest) (mapper.TokenPair, error) {
 	u, err := a.Storage.GetUser(ctx, req.Login)
 	if err != nil {
-		return mapper.TokenPair{
-			Status: "user not found",
-		}, nil
+		if errors.Is(err, sql.ErrNoRows) {
+			return mapper.TokenPair{
+				Status: "user not found",
+			}, ErrUserNotFound
+		}
+		return mapper.TokenPair{}, err
 	}
-
-	log.Println(u)
 
 	if err := bcrypt.CompareHashAndPassword(u.Password, []byte(req.Password)); err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 			return mapper.TokenPair{
 				Status: "invalid password",
-			}, nil
+			}, ErrInvalidPassword
 		}
+		return mapper.TokenPair{}, err
 	}
 
 	refreshSession := model.RefreshSession{
