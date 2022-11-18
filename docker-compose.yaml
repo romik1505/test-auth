@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  auth-service:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - PG_DSN=postgres://postgres:1505@db:5432/auth?sslmode=disable
+      - POSTGRES_PASSWORD=1505
+
+  db:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "auth"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1505"
+    

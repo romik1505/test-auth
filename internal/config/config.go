@@ -14,7 +14,7 @@ func NewPostgresConnenction() store.Storage {
 	if !ok {
 		log.Fatalln("PG_DSN not set")
 	}
-	log.Println("postgres connecion: ", connString)
+	log.Println("postgres connection: ", connString)
 
 	con, err := sqlx.Open("postgres", connString)
 	if err != nil {
