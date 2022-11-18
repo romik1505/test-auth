@@ -48,7 +48,7 @@ func (s Storage) CreateUser(ctx context.Context, user model.User) (model.User, e
 	return user, nil
 }
 
-func (s Storage) CreateSession(ctx context.Context, session model.Session) (model.Session, error) {
+func (s Storage) CreateSession(ctx context.Context, session model.RefreshSession) (model.RefreshSession, error) {
 	query := s.Builder().Insert("sessions").SetMap(map[string]interface{}{
 		"user_id":       session.UserID,
 		"refresh_token": session.RefreshToken,
@@ -57,11 +57,11 @@ func (s Storage) CreateSession(ctx context.Context, session model.Session) (mode
 
 	q, vars, err := query.ToSql()
 	if err != nil {
-		return model.Session{}, err
+		return model.RefreshSession{}, err
 	}
 
 	if err := s.DB.QueryRowxContext(ctx, q, vars...).StructScan(&session); err != nil {
-		return model.Session{}, err
+		return model.RefreshSession{}, err
 	}
 	return session, nil
 }

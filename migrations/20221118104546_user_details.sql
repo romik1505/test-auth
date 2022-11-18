@@ -10,7 +10,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE sessions (
-    id uuid PRIMARY KEY,
+    id uuid PRIMARY KEY default gen_random_uuid(),
     user_id uuid NOT NULL,
     refresh_token bytea NOT NULL,
     expires_in INT NOT NULL,
