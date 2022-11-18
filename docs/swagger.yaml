@@ -1,0 +1,92 @@
+definitions:
+  mapper.LoginRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  mapper.RegisterRequest:
+    properties:
+      email:
+        type: string
+      login:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    type: object
+  mapper.TokenPair:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      operationId: login
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/mapper.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mapper.TokenPair'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: login user account
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      operationId: register
+      parameters:
+      - description: register user data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/mapper.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: register new user account
+      tags:
+      - auth
+swagger: "2.0"
